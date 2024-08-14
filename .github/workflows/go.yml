@@ -1,0 +1,38 @@
+name: Go Build
+
+on:
+  push:
+    tags:
+      - 'v[0-9].*'
+
+jobs:
+  go-build:
+    permissions:
+        contents: write
+    name: Bundle on ${{ matrix.os }} / ${{ matrix.go }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        go: ["1.2"]
+      fail-fast: false
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.1
+        with:
+          lfs: 'true'
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go }}
+
+      - name: Build
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARTIFACT_NAME: ${{ matrix.os == 'windows-latest' && 'civitai_model_downloader.exe' || 'civitai_model_downloader' }}
+        run: |
+          go build .
+          gh release upload ${{ github.ref_name }} $ARTIFACT_NAME
