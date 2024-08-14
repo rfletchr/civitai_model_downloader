@@ -43,5 +43,5 @@ You should see output similar to this
 2024/08/14 15:49:54 INFO Starting Clipboard Watcher
 ```
 
-Now that the tool is up and running you can simply copy a models AIR and it will be downloaded.
+Now that the tool is up and running you can download models by clicking the copy button next to their AIR in the models details.
 ![Example Image](img/air-copy-button.png)
