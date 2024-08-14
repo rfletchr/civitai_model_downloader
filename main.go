@@ -88,7 +88,7 @@ func download_models(api_key string, directory string, resources chan *AirResour
 
 }
 
-func initConfig() {
+func initConfig() (string, error) {
 	slog.Info("Setting Up Config.")
 	config_path := os.ExpandEnv("$HOME/.config/civitai/model_downloader.yaml")
 	viper.SetConfigFile(config_path)
@@ -107,21 +107,30 @@ func initConfig() {
 	if err != nil {
 		panic(err)
 	}
+
+	return config_path, nil
 }
 
 func main() {
 	slog.Info("Loading...")
-	initConfig()
+	config_path, err := initConfig()
+	slog.Info("Using Config File: " + config_path)
+
+	if err != nil {
+		panic(err)
+	}
 
 	api_key := viper.GetString("api_key")
 	if api_key == "" {
-		slog.Error(fmt.Sprintf("No API defined in config. Some models require you to login, these will fail"))
+		msg := fmt.Sprintf("Please set your API Key in: %s", config_path)
+		slog.Error(msg)
+		os.Exit(1)
 	}
 
 	directory := os.ExpandEnv(viper.GetString("directory"))
 
 	slog.Info(fmt.Sprintf("Using Directory: %s", directory))
-	err := os.MkdirAll(directory, os.ModePerm)
+	err = os.MkdirAll(directory, os.ModePerm)
 	if err != nil {
 		panic(err)
 	}
