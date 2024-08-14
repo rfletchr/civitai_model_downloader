@@ -33,6 +33,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           ARTIFACT_NAME: ${{ matrix.os == 'windows-latest' && 'civitai_model_downloader.exe' || 'civitai_model_downloader' }}
+          GOPATH: $HOME/go
         run: |
           go get .
           go build .
