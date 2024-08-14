@@ -34,5 +34,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           ARTIFACT_NAME: ${{ matrix.os == 'windows-latest' && 'civitai_model_downloader.exe' || 'civitai_model_downloader' }}
         run: |
+          go get .
           go build .
           gh release upload ${{ github.ref_name }} $ARTIFACT_NAME
