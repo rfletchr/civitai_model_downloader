@@ -44,5 +44,4 @@ You should see output similar to this
 ```
 
 Now that the tool is up and running you can simply copy a models AIR and it will be downloaded.
-
-
+![Example Image](img/air-copy-button.png)
